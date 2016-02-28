@@ -31,6 +31,10 @@
 
                     <p style="text-align: center;">Medliv was started to help people take control of their health through alternative medicine.</p>
                     <p style="text-align: center;">
+<section class="video">
+  <img src="http://placehold.it/350x150" data-video="http://www.youtube.com/embed/q3Dt6kI-ajA?autoplay=1" title="Play Video" class="video__placeholder" />
+  <button class="video__button"></button>
+</section>
                       <img src="./res/clean-hr.png" alt="" class="clean-hr insert--image wrap-off-align-center">
                     </p>
                   </div>
@@ -66,6 +70,19 @@
   ga('create', 'UA-74402786-1', 'auto');
   ga('send', 'pageview');
 
+</script>
+
+<script>
+$('.video__placeholder, .video__button').on('click', function() {
+  if (!$('#video-player').length) {
+      var video = '<iframe id="video-player" src="' + $('.video__placeholder').attr('data-video') + '" frameborder="0" allowfullscreen wmode="opaque"></iframe>';
+      $(video).insertAfter($('.video__placeholder'));
+      $('.video__button').addClass('is-playing');
+    } else {
+        $('.video__button').removeClass('is-playing');
+        $('#video-player').remove();
+      }
+});
 </script>
   </body>
 </html>
