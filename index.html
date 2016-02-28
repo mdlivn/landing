@@ -12,6 +12,7 @@
     <link rel="icon" href="favicon.ico">
     <link type="text/css" rel="stylesheet" href="./res/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="./res/styles.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   </head>
   <body>
     <div class="bg-image"></div>
@@ -31,10 +32,9 @@
 
                     <p style="text-align: center;">Medliv was started to help people take control of their health through alternative medicine.</p>
                     <p style="text-align: center;">
-<section class="video">
-  <img src="http://placehold.it/350x150" data-video="http://www.youtube.com/embed/q3Dt6kI-ajA?autoplay=1" title="Play Video" class="video__placeholder" />
-  <button class="video__button"></button>
-</section>
+                    <div class="video">
+                        <a href="https://vimeo.com/157044544" class="playbutton"></a>
+                        </div>
                       <img src="./res/clean-hr.png" alt="" class="clean-hr insert--image wrap-off-align-center">
                     </p>
                   </div>
@@ -73,16 +73,73 @@
 </script>
 
 <script>
-$('.video__placeholder, .video__button').on('click', function() {
-  if (!$('#video-player').length) {
-      var video = '<iframe id="video-player" src="' + $('.video__placeholder').attr('data-video') + '" frameborder="0" allowfullscreen wmode="opaque"></iframe>';
-      $(video).insertAfter($('.video__placeholder'));
-      $('.video__button').addClass('is-playing');
-    } else {
-        $('.video__button').removeClass('is-playing');
-        $('#video-player').remove();
-      }
-});
+$(document).ready(function() {
+  // Showcase video of my latest project
+  var vimeoUrl = 'http://player.vimeo.com/external/157044544.hd.mp4';
+
+  var $video = $('<video>').attr('src', vimeoUrl);
+  var video = $video[0];
+
+  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  var loaded = false;
+
+  $('.playbutton').on('click', function(e) {
+      e.preventDefault();
+  
+      var $button = $(this);
+      var $holder = $(this).parent();
+      var state = $button.hasClass('paused') ? 'paused' :
+        $button.hasClass('playing') ? 'playing' :
+        'loading';
+  
+      if (state == 'loading') {
+            $holder.prepend($video);
+      
+            if (isMobile) {
+                    video.play();
+                    $button.addClass('playing');
+                    return;
+                  }
+      
+            $button.addClass('loading');
+      
+            if (loaded) {
+                    $button.addClass('playing');
+                    video.play();
+                  }
+      
+            video.load();
+      
+            $video.on('canplay', function() {
+                    loaded = true;
+                    $button.addClass('playing');
+                    $button.removeClass('loading');
+                    video.play();
+                  });
+      
+            $video.on('ended', function() {
+                    $button.removeClass('playing');
+                  });
+      
+            return;
+          }
+  
+      if (state === 'playing') {
+            video.pause();
+            $button.addClass('paused');
+      
+            return;
+          }
+  
+      if (state === 'paused') {
+            video.play();
+            $button.removeClass('paused');
+      
+            return;
+          }
+  
+    })
+})
 </script>
   </body>
 </html>
